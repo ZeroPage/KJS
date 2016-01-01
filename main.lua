@@ -1,5 +1,6 @@
 require "TEsound"
 require "Money"
+local anim = require"anim"
 
 aa=love.filesystem.createDirectory("../KJS")
 contents, size = love.filesystem.read("save.sav",100)
@@ -21,6 +22,9 @@ ocean=0
 oceanPrice=100000000
 space=0
 spacePrice=1800000000
+
+local grandma_anims = {}
+
 function love.load()
     TEsound.playLooping("resource/bgm/bgm.mp3", "bgm")
     bgmOn = love.graphics.newImage("resource/image/bgm_on.png")
@@ -30,6 +34,8 @@ function love.load()
     btn_save = love.graphics.newImage("resource/image/save.png")
     btn_reset = love.graphics.newImage("resource/image/reset.png")
 	moneyImg=love.graphics.newImage("/resource/image/money_image.png")
+	grandma1=love.graphics.newImage("/resource/image/grandma1.png")
+	grandma2=love.graphics.newImage("/resource/image/grandma2.png")
 	love.graphics.setBackgroundColor(0,0,0)
 	love.graphics.setNewFont("/resource/font/RixHeadB.ttf",20)
 
@@ -63,11 +69,15 @@ function love.draw()
     love.graphics.print("￦ "..math.floor(oceanPrice),400,345)
     love.graphics.print("우주 쓰레기 수거: "..space,600,320)
     love.graphics.print("￦ "..math.floor(spacePrice),600,345)
+
+
+    for key,value in pairs(grandma_anims) do
+        grandma_anims[key]:draw(400,584)
+    end
 end
 
 function love.mousepressed(x, y, button, istouch)
     if button == 1 then
-	money:set(money:get()+100)
         if x >= 750 and x <= 790 and y >= 10 and y <= 50 and toggleBGM then
             toggleBGM=false
             TEsound.stop("bgm")
@@ -88,7 +98,8 @@ function love.mousepressed(x, y, button, istouch)
             earning=earning+10
             grandmotherPrice=grandmotherPrice*1.1
             grandmother=grandmother+1
-            love.graphics.draw(gradma1,750,10)
+	    grandma_anim = anim.newAnimation(0.1,true,grandma1,grandma2)
+	    table.insert(grandma_anims,grandma_anim)
         end
 
         if x>=400 and x<=570 and y>=190 and y<=235 and money:get()>=usedcollectorPrice then
@@ -151,4 +162,7 @@ end
 function love.update(dt)
     money:set(money:get()+earning*dt)
     TEsound.cleanup()
+    for key,value in pairs(grandma_anims) do
+        grandma_anims[key]:update(dt)
+    end
 end

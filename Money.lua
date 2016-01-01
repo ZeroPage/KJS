@@ -1,4 +1,4 @@
-Money = {balance = 0}
+Money = {balance = 100}
 
 function Money:new(o)	
     o = o or {}
