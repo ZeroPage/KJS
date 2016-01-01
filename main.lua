@@ -37,7 +37,7 @@ function love.load()
 	grandma1=love.graphics.newImage("/resource/image/grandma1.png")
 	grandma2=love.graphics.newImage("/resource/image/grandma2.png")
 	love.graphics.setBackgroundColor(0,0,0)
-	love.graphics.setNewFont("/resource/font/RixHeadB.ttf",20)
+	love.graphics.setNewFont("/resource/font/SeoulHangangB.ttf",20)
 
 end
 
