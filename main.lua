@@ -65,8 +65,9 @@ function love.draw()
     love.graphics.print("￦ "..math.floor(spacePrice),600,345)
 end
 
-function love.mousepressed(x, y, button)
-    if button == "l" then
+function love.mousepressed(x, y, button, istouch)
+    if button == 1 then
+	money:set(money:get()+100)
         if x >= 750 and x <= 790 and y >= 10 and y <= 50 and toggleBGM then
             toggleBGM=false
             TEsound.stop("bgm")
@@ -87,6 +88,7 @@ function love.mousepressed(x, y, button)
             earning=earning+10
             grandmotherPrice=grandmotherPrice*1.1
             grandmother=grandmother+1
+            love.graphics.draw(gradma1,750,10)
         end
 
         if x>=400 and x<=570 and y>=190 and y<=235 and money:get()>=usedcollectorPrice then
