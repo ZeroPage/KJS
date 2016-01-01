@@ -13,6 +13,14 @@ usedcollector=0
 usedcollectorPrice=1000
 apartment=0
 apartmentPrice=45000
+factory=0
+factoryPrice=100000
+import=0
+importPrice=3000000
+ocean=0
+oceanPrice=100000000
+space=0
+spacePrice=1800000000
 function love.load()
     TEsound.playLooping("resource/bgm/bgm.mp3", "bgm")
     bgmOn = love.graphics.newImage("resource/image/bgm_on.png")
@@ -45,13 +53,21 @@ function love.draw()
     love.graphics.draw(btn_save,100,500)
     love.graphics.draw(btn_reset,100,550)
 	love.graphics.print("고물상 크기: "..junkyardScale,400,125)
-	love.graphics.print("￦ "..math.pow(10,junkyardScale+5),400,145)
+	love.graphics.print("￦ "..math.pow(10,junkyardScale+5),400,150)
     love.graphics.print("폐지줍는 할머니: "..grandmother,600,125)
-    love.graphics.print("￦ "..math.floor(grandmotherPrice),600,145)
-    love.graphics.print("안쓰는 가전 삽니다: "..usedcollector,400,185)
-    love.graphics.print("￦ "..math.floor(usedcollectorPrice),400,205)
-    love.graphics.print("아파트 폐품 수거: "..apartment,600,185)
-    love.graphics.print("￦ "..math.floor(apartmentPrice),600,205)
+    love.graphics.print("￦ "..math.floor(grandmotherPrice),600,150)
+    love.graphics.print("안쓰는 가전 삽니다: "..usedcollector,400,190)
+    love.graphics.print("￦ "..math.floor(usedcollectorPrice),400,215)
+    love.graphics.print("아파트 폐품 수거: "..apartment,600,190)
+    love.graphics.print("￦ "..math.floor(apartmentPrice),600,215)
+    love.graphics.print("공업단지 고철 수거: "..factory,400,255)
+    love.graphics.print("￦ "..math.floor(factoryPrice),400,280)
+    love.graphics.print("해외 고철 수입: "..import,600,255)
+    love.graphics.print("￦ "..math.floor(importPrice),600,280)
+    love.graphics.print("해양 쓰레기 수거: "..ocean,400,320)
+    love.graphics.print("￦ "..math.floor(oceanPrice),400,345)
+    love.graphics.print("우주 쓰레기 수거: "..space,600,320)
+    love.graphics.print("￦ "..math.floor(spacePrice),600,345)
 end
 
 function love.mousepressed(x, y, button)
@@ -65,33 +81,61 @@ function love.mousepressed(x, y, button)
             TEsound.playLooping("resource/bgm/bgm.mp3", "bgm")
         end
 
-    	if x>=400 and x<=520 and y>=125 and y<=165 and money:get()>=math.pow(10,junkyardScale+5) and junkyardScale < 5 then
+    	if x>=400 and x<=520 and y>=125 and y<=170 and money:get()>=math.pow(10,junkyardScale+5) and junkyardScale < 5 then
     		money:set(money:get() - math.pow(10,junkyardScale+5))
-            earning=earning*2
+            earning=earning*1.5
             junkyardScale=junkyardScale+1
     	end
 
-        if x>=600 and x<=750 and y>=125 and y<=165 and money:get()>=grandmotherPrice then
+        if x>=600 and x<=750 and y>=125 and y<=170 and money:get()>=grandmotherPrice then
             money:set(money:get() - grandmotherPrice)
             earning=earning+10
             grandmotherPrice=grandmotherPrice*1.1
             grandmother=grandmother+1
         end
 
-        if x>=400 and x<=570 and y>=175 and y<=215 and money:get()>=usedcollectorPrice then
+        if x>=400 and x<=570 and y>=190 and y<=235 and money:get()>=usedcollectorPrice then
             money:set(money:get() - usedcollectorPrice)
             earning=earning+200
             usedcollectorPrice=usedcollectorPrice*1.1
             usedcollector=usedcollector+1
         end
 
-        if x >= 600 and x <= 760 and y >= 175 and y <= 215 and money:get() >= apartmentPrice then
+        if x>=600 and x<=760 and y>=190 and y<=235 and money:get()>=apartmentPrice then
             money:set(money:get() - apartmentPrice)
             earning = earning + 9000
             apartmentPrice = apartmentPrice * 1.1
             apartment = apartment + 1
         end
+
+        if x>=400 and x<=570 and y>=255 and y<=300 and money:get()>=factoryPrice then
+            money:set(money:get() - factoryPrice)
+            earning = earning + 20000
+            factoryPrice = factoryPrice * 1.1
+            fatory = factory + 1
+        end
+
+        if x>=600 and x<=735 and y>=255 and y<=300 and money:get()>=importPrice then
+            money:set(money:get() - importPrice)
+            earning = earning + 600000
+            importPrice = importPrice * 1.1
+            import = import + 1
+        end
+
+        if x>=400 and x<=550 and y>=320 and y<=365 and money:get()>=oceanPrice then
+            money:set(money:get() - moneyPrice)
+            earning = earning + 20000000
+            oceanPrice = oceanPrice * 1.1
+            ocean = ocean + 1
+        end
         
+        if x>=600 and x<=760 and y>=320 and y<=365 and money:get()>=spacePrice then
+            money:set(money:get() - spacePrice)
+            earning = earning + 360000000
+            spacePrice = spacePrice * 1.1
+            space = space + 1
+        end
+
         if x>=100 and x<=200 and y>=500 and y<=530 then
             success = love.filesystem.write("save.sav",money:get())
         end
