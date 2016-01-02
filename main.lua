@@ -8,22 +8,38 @@ toggleBGM=true
 money = Money:new({balance = contents})
 earning=1
 junkyardScale=0
+init_junkyardPrice=100000
+junkyardPrice=init_junkyardPrice
 grandmother=0
-grandmotherPrice=30
+init_grandmotherPrice=30
+grandmotherPrice=init_grandmotherPrice
 usedcollector=0
-usedcollectorPrice=1000
+init_usedcollectorPrice=1000
+usedcollectorPrice=init_usedcollectorPrice
 apartment=0
-apartmentPrice=45000
+init_apartmentPrice=45000
+apartmentPrice=init_apartmentPrice
 factory=0
-factoryPrice=100000
+init_factoryPrice=100000
+factoryPrice=init_factoryPrice
 import=0
-importPrice=3000000
+init_importPrice=3000000
+importPrice=init_importPrice
 ocean=0
-oceanPrice=100000000
+init_oceanPrice=100000000
+oceanPrice=init_oceanPrice
 space=0
-spacePrice=1800000000
+init_spacePrice=1800000000
+spacePrice=init_spacePrice
+reset_bonus=0
 
 local grandma_anims = {}
+local tv_anims = {}
+local can_anims = {}
+local industry_anims = {}
+local global_anims = {}
+local ocean_anims = {}
+local satellite_anims = {}
 
 function love.load()
     TEsound.playLooping("resource/bgm/bgm.mp3", "bgm")
@@ -36,6 +52,19 @@ function love.load()
 	moneyImg=love.graphics.newImage("/resource/image/money_image.png")
 	grandma1=love.graphics.newImage("/resource/image/grandma1.png")
 	grandma2=love.graphics.newImage("/resource/image/grandma2.png")
+	tv1=love.graphics.newImage("/resource/image/tv1.png")
+	tv2=love.graphics.newImage("/resource/image/tv2.png")
+	can1=love.graphics.newImage("/resource/image/can1.png")
+	can2=love.graphics.newImage("/resource/image/can2.png")
+	industry1=love.graphics.newImage("/resource/image/industry1.png")
+	industry2=love.graphics.newImage("/resource/image/industry2.png")
+	global1=love.graphics.newImage("/resource/image/global1.png")
+	global2=love.graphics.newImage("/resource/image/global2.png")
+	ocean1=love.graphics.newImage("/resource/image/ocean1.png")
+	ocean2=love.graphics.newImage("/resource/image/ocean2.png")
+	satellite1=love.graphics.newImage("/resource/image/satellite1.png")
+	satellite2=love.graphics.newImage("/resource/image/satellite2.png")
+
 	love.graphics.setBackgroundColor(0,0,0)
 	love.graphics.setNewFont("/resource/font/SeoulHangangB.ttf",20)
 
@@ -74,6 +103,24 @@ function love.draw()
     for key,value in pairs(grandma_anims) do
         grandma_anims[key]:draw(400,584)
     end
+    for key,value in pairs(tv_anims) do
+        tv_anims[key]:draw(400,584)
+    end
+    for key,value in pairs(can_anims) do
+        can_anims[key]:draw(400,584)
+    end
+    for key,value in pairs(industry_anims) do
+        industry_anims[key]:draw(400,584)
+    end
+    for key,value in pairs(global_anims) do
+        global_anims[key]:draw(400,584)
+    end
+    for key,value in pairs(ocean_anims) do
+        ocean_anims[key]:draw(400,584)
+    end
+    for key,value in pairs(satellite_anims) do
+        satellite_anims[key]:draw(400,584)
+    end
 end
 
 function love.mousepressed(x, y, button, istouch)
@@ -87,10 +134,11 @@ function love.mousepressed(x, y, button, istouch)
             TEsound.playLooping("resource/bgm/bgm.mp3", "bgm")
         end
 
-    	if x>=400 and x<=520 and y>=125 and y<=170 and money:get()>=math.pow(10,junkyardScale+5) and junkyardScale < 5 then
-    		money:set(money:get() - math.pow(10,junkyardScale+5))
+    	if x>=400 and x<=520 and y>=125 and y<=170 and money:get()>=junkyardPrice and junkyardScale < 5 then
+    		money:set(money:get() - junkyardPrice)
             earning=earning*1.5
             junkyardScale=junkyardScale+1
+            junkyardPrice=math.pow(10,junkyardScale+5)
     	end
 
         if x>=600 and x<=750 and y>=125 and y<=170 and money:get()>=grandmotherPrice then
@@ -98,8 +146,8 @@ function love.mousepressed(x, y, button, istouch)
             earning=earning+10
             grandmotherPrice=grandmotherPrice*1.1
             grandmother=grandmother+1
-	    grandma_anim = anim.newAnimation(0.1,true,grandma1,grandma2)
-	    table.insert(grandma_anims,grandma_anim)
+	    	grandma_anim = anim.newAnimation(0.1,true,grandma1,grandma2)
+	    	table.insert(grandma_anims,grandma_anim)
         end
 
         if x>=400 and x<=570 and y>=190 and y<=235 and money:get()>=usedcollectorPrice then
@@ -107,6 +155,8 @@ function love.mousepressed(x, y, button, istouch)
             earning=earning+200
             usedcollectorPrice=usedcollectorPrice*1.1
             usedcollector=usedcollector+1
+            tv_anim = anim.newAnimation(0.1,true,tv1,tv2)
+            table.insert(tv_anims,tv_anim)
         end
 
         if x>=600 and x<=760 and y>=190 and y<=235 and money:get()>=apartmentPrice then
@@ -114,6 +164,8 @@ function love.mousepressed(x, y, button, istouch)
             earning = earning + 9000
             apartmentPrice = apartmentPrice * 1.1
             apartment = apartment + 1
+            can_anim = anim.newAnimation(0.1,true,can1,can2)
+            table.insert(can_anims,can_anim)
         end
 
         if x>=400 and x<=570 and y>=255 and y<=300 and money:get()>=factoryPrice then
@@ -121,6 +173,8 @@ function love.mousepressed(x, y, button, istouch)
             earning = earning + 20000
             factoryPrice = factoryPrice * 1.1
             fatory = factory + 1
+            industry_anim = anim.newAnimation(0.1,true,industry1,industry2)
+            table.insert(industry_anims,industry_anim)
         end
 
         if x>=600 and x<=735 and y>=255 and y<=300 and money:get()>=importPrice then
@@ -128,13 +182,17 @@ function love.mousepressed(x, y, button, istouch)
             earning = earning + 600000
             importPrice = importPrice * 1.1
             import = import + 1
+            global_anim = anim.newAnimation(0.1,true,global1,global2)
+            table.insert(global_anims,global_anim)
         end
 
         if x>=400 and x<=550 and y>=320 and y<=365 and money:get()>=oceanPrice then
-            money:set(money:get() - moneyPrice)
+            money:set(money:get() - oceanPrice)
             earning = earning + 20000000
             oceanPrice = oceanPrice * 1.1
             ocean = ocean + 1
+            ocean_anim = anim.newAnimation(0.1,true,ocean1,ocean2)
+            table.insert(ocean_anims,ocean_anim)
         end
         
         if x>=600 and x<=760 and y>=320 and y<=365 and money:get()>=spacePrice then
@@ -142,6 +200,8 @@ function love.mousepressed(x, y, button, istouch)
             earning = earning + 360000000
             spacePrice = spacePrice * 1.1
             space = space + 1
+            satellite_anim = anim.newAnimation(0.1,true,satellite1,satellite2)
+            table.insert(satellite_anims,satellite_anim)
         end
 
         if x>=100 and x<=200 and y>=500 and y<=530 then
@@ -149,20 +209,76 @@ function love.mousepressed(x, y, button, istouch)
         end
 
         if x>=100 and x<=200 and y>=550 and y<=580 then
+        	reset_bonus=reset_bonus+math.floor(money:get()/10000000000000)
             money:set(money:get()-money:get())
+            prev_earning=earning
             earning=1
+            junkyardScale=0
+            junkyardPrice=init_junkyardPrice
             grandmother=0
+            grandmotherPrice=init_grandmotherPrice
             usedcollector=0
+            usedcollectorPrice=init_usedcollectorPrice
             apartment=0
+            apartmentPrice=init_apartmentPrice
+            factory=0
+            factoryPrice=init_factoryPrice
+            import=0
+            importPrice=init_importPrice
+            ocean=0
+            oceanPrice=init_oceanPrice
+            space=0
+            spacePrice=init_spacePrice
+
+            for key,value in pairs(grandma_anims) do
+            	grandma_anims[key]=nil
+            end
+            for key,value in pairs(tv_anims) do
+            	tv_anims[key]=nil
+            end
+            for key,value in pairs(can_anims) do
+            	can_anims[key]=nil
+            end
+            for key,value in pairs(industry_anims) do
+            	industry_anims[key]=nil
+            end
+            for key,value in pairs(global_anims) do
+            	global_anims[key]=nil
+            end
+            for key,value in pairs(ocean_anims) do
+            	ocean_anims[key]=nil
+            end
+            for key,value in pairs(satellite_anims) do
+            	satellite_anims[key]=nil
+            end
+           
             success = love.filesystem.write("save.sav",money:get())
         end
     end
 end
 
 function love.update(dt)
-    money:set(money:get()+earning*dt)
+    money:set(money:get()+(earning*dt)+(earning*reset_bonus*0.01))
     TEsound.cleanup()
     for key,value in pairs(grandma_anims) do
         grandma_anims[key]:update(dt)
+    end
+    for key,value in pairs(tv_anims) do
+        tv_anims[key]:update(dt)
+    end
+    for key,value in pairs(can_anims) do
+        can_anims[key]:update(dt)
+    end
+    for key,value in pairs(industry_anims) do
+        industry_anims[key]:update(dt)
+    end
+    for key,value in pairs(global_anims) do
+        global_anims[key]:update(dt)
+    end
+    for key,value in pairs(ocean_anims) do
+        ocean_anims[key]:update(dt)
+    end
+    for key,value in pairs(satellite_anims) do
+        satellite_anims[key]:update(dt)
     end
 end
