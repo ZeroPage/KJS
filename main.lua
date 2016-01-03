@@ -1,38 +1,12 @@
 require "TEsound"
 require "Money"
 local anim = require"anim"
+local JSON = require "JSON"
+
 
 aa=love.filesystem.createDirectory("../KJS")
-contents, size = love.filesystem.read("save.sav",100)
-toggleBGM=true
-money = Money:new({balance = contents})
-earning=1
-junkyardScale=0
-init_junkyardPrice=100000
-junkyardPrice=init_junkyardPrice
-grandmother=0
-init_grandmotherPrice=30
-grandmotherPrice=init_grandmotherPrice
-usedcollector=0
-init_usedcollectorPrice=1000
-usedcollectorPrice=init_usedcollectorPrice
-apartment=0
-init_apartmentPrice=45000
-apartmentPrice=init_apartmentPrice
-factory=0
-init_factoryPrice=100000
-factoryPrice=init_factoryPrice
-import=0
-init_importPrice=3000000
-importPrice=init_importPrice
-ocean=0
-init_oceanPrice=100000000
-oceanPrice=init_oceanPrice
-space=0
-init_spacePrice=1800000000
-spacePrice=init_spacePrice
-reset_bonus=0
-
+contents, size = love.filesystem.read("save.sav",5000)
+money = Money:new({balance = 100})
 local grandma_anims = {}
 local tv_anims = {}
 local can_anims = {}
@@ -40,6 +14,73 @@ local industry_anims = {}
 local global_anims = {}
 local ocean_anims = {}
 local satellite_anims = {}
+
+init_grandmotherPrice=30
+init_junkyardPrice=100000
+init_usedcollectorPrice=1000
+init_apartmentPrice=45000
+init_factoryPrice=100000
+init_importPrice=3000000
+init_oceanPrice=100000000
+init_spacePrice=1800000000
+
+if type(size)=='number'  then
+    print("load successful!")
+    loadData=JSON:decode(contents)
+    reset_bonus=loadData['reset_bonus']
+    print(loadData['money']['balance'])
+    money:set(tonumber(loadData['money']['balance']))
+    grandmother=loadData['grandmother']
+    grandmotherPrice=loadData['grandmotherPrice']
+    earning=tonumber(loadData['earning'])
+    junkyardScale=loadData['junkyardScale']
+    junkyardPrice=loadData['junkyardPrice']
+    usedcollector=loadData['usedcollector']
+    usedcollectorPrice=loadData['usedcollectorPrice']
+    apartment=loadData['apartment']
+    apartmentPrice=loadData['apartmentPrice']
+    factory=loadData['factory']
+    factoryPrice=loadData['factoryPrice']
+    import=loadData['import']
+    importPrice=loadData['importPrice']
+    ocean=loadData['ocean']
+    oceanPrice=loadData['oceanPrice']
+    space=loadData['space']
+    spacePrice=loadData['spacePrice']
+--[[
+    grandma_anims = loadData['grandma_anims']
+    tv_anims = loadData['tv_anims']
+    can_anims = loadData['can_anims']
+    industry_anims = loadData['industry_anims']
+    global_anims = loadData['global_anims']
+    ocean_anims = loadData['ocean_anims']
+    satellite_anims = loadData['satellite_anims']
+]]--
+
+else
+    print("load failed!")
+    reset_bonus=0
+    grandmother=0
+    init_grandmotherPrice=30
+    grandmotherPrice=init_grandmotherPrice
+    earning=1
+    junkyardScale=0
+    junkyardPrice=init_junkyardPrice
+    usedcollector=0
+    usedcollectorPrice=init_usedcollectorPrice
+    apartment=0
+    apartmentPrice=init_apartmentPrice
+    factory=0
+    factoryPrice=init_factoryPrice
+    import=0
+    importPrice=init_importPrice
+    ocean=0
+    oceanPrice=init_oceanPrice
+    space=0
+    spacePrice=init_spacePrice
+end
+toggleBGM=true
+
 
 function love.load()
     TEsound.playLooping("resource/bgm/bgm.mp3", "bgm")
@@ -205,7 +246,40 @@ function love.mousepressed(x, y, button, istouch)
         end
 
         if x>=100 and x<=200 and y>=500 and y<=530 then
-            success = love.filesystem.write("save.sav",money:get())
+	    saveData = {}
+	    saveData['reset_bonus']=reset_bonus
+	    saveData['money']=money 
+	    saveData['prev_earning']=prev_earning
+	    saveData['earning']=earning
+	    saveData['junkyardScale']=junkyardScale
+	    saveData['junkyardPrice']=junkyardPrice
+	    saveData['grandmother']=grandmother
+	    saveData['grandmotherPrice']=grandmotherPrice
+	    saveData['usedcollector']=usedcollector
+	    saveData['usedcollectorPrice']=usedcollectorPrice
+	    saveData['apartment']=apartment
+	    saveData['apartmentPrice']=apartmentPrice
+	    saveData['factory']=factory
+	    saveData['factoryPrice']=factoryPrice
+	    saveData['import']=import
+	    saveData['importPrice']=importPrice
+	    saveData['ocean']=ocean
+	    saveData['oceanPrice']=oceanPrice
+	    saveData['space']=space
+	    saveData['spacePrice']=spacePrice
+
+--[[
+	    saveData['grandma_anims']=grandma_anims
+	    saveData['tv_anims']=tv_anims
+	    saveData['can_anims']=can_anims
+	    saveData['industry_anims']=industry_anims
+	    saveData['global_anims']=global_anims
+	    saveData['ocean_anims']=ocean_anims
+	    saveData['satellite_anims']=satellite_anims
+]]--
+	    saveString = JSON:encode(saveData)
+
+            success = love.filesystem.write("save.sav",saveString)
         end
 
         if x>=100 and x<=200 and y>=550 and y<=580 then
@@ -251,8 +325,7 @@ function love.mousepressed(x, y, button, istouch)
             for key,value in pairs(satellite_anims) do
             	satellite_anims[key]=nil
             end
-           
-            success = love.filesystem.write("save.sav",money:get())
+        	 --    저장 해야댐?
         end
     end
 end
