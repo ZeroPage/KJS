@@ -325,7 +325,33 @@ function love.mousepressed(x, y, button, istouch)
             for key,value in pairs(satellite_anims) do
             	satellite_anims[key]=nil
             end
-        	 --    저장 해야댐?
+
+            saveData = {}
+            saveData['reset_bonus']=reset_bonus
+            saveData['money']=money
+            saveData['prev_earning']=prev_earning
+            saveData['earning']=earning
+            saveData['junkyardScale']=junkyardScale
+            saveData['junkyardPrice']=junkyardPrice
+            saveData['grandmother']=grandmother
+            saveData['grandmotherPrice']=grandmotherPrice
+            saveData['usedcollector']=usedcollector
+            saveData['usedcollectorPrice']=usedcollectorPrice
+            saveData['apartment']=apartment
+            saveData['apartmentPrice']=apartmentPrice
+            saveData['factory']=factory
+            saveData['factoryPrice']=factoryPrice
+            saveData['import']=import
+            saveData['importPrice']=importPrice
+            saveData['ocean']=ocean
+            saveData['oceanPrice']=oceanPrice
+            saveData['space']=space
+            saveData['spacePrice']=spacePrice
+
+            saveString = JSON:encode(saveData)
+
+            success = love.filesystem.write("save.sav",saveString)
+
         end
     end
 end
