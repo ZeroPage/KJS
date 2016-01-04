@@ -3,10 +3,12 @@ require "Money"
 local anim = require"anim"
 local JSON = require "JSON"
 
-
+--Initialize save file components
 aa=love.filesystem.createDirectory("../KJS")
 contents, size = love.filesystem.read("save.sav",5000)
-money = Money:new({balance = 100})
+money = Money:new({balance = 0})
+
+--Initialize animation components
 local grandma_anims = {}
 local tv_anims = {}
 local can_anims = {}
@@ -15,6 +17,7 @@ local global_anims = {}
 local ocean_anims = {}
 local satellite_anims = {}
 
+--Default item values
 init_grandmotherPrice=30
 init_junkyardPrice=100000
 init_usedcollectorPrice=1000
@@ -24,12 +27,13 @@ init_importPrice=3000000
 init_oceanPrice=100000000
 init_spacePrice=1800000000
 
+--Data loading source
 if type(size)=='number'  then
     print("load successful!")
     loadData=JSON:decode(contents)
     reset_bonus=loadData['reset_bonus']
     print(loadData['money']['balance'])
-    money:set(tonumber(loadData['money']['balance']))
+    money:set(14574534464756)
     grandmother=loadData['grandmother']
     grandmotherPrice=loadData['grandmotherPrice']
     earning=tonumber(loadData['earning'])
@@ -81,7 +85,7 @@ else
 end
 toggleBGM=true
 
-
+--Load game resources
 function love.load()
     TEsound.playLooping("resource/bgm/bgm.mp3", "bgm")
     bgmOn = love.graphics.newImage("resource/image/bgm_on.png")
@@ -111,12 +115,15 @@ function love.load()
 
 end
 
+--Drawing game resources
 function love.draw()
+    --Drawing BGM toggles
     if toggleBGM then 
         love.graphics.draw(bgmOn,750,10)
     else
         love.graphics.draw(bgmOff,750,10)
     end
+    --Drawing buttons
 	love.graphics.draw(title,105,10)
 	love.graphics.draw(moneyImg,75,425)
     love.graphics.draw(trash,75,125)
@@ -140,7 +147,7 @@ function love.draw()
     love.graphics.print("우주 쓰레기 수거: "..space,600,320)
     love.graphics.print("￦ "..math.floor(spacePrice),600,345)
 
-
+    --Drawing animations
     for key,value in pairs(grandma_anims) do
         grandma_anims[key]:draw(400,584)
     end
@@ -164,7 +171,9 @@ function love.draw()
     end
 end
 
+--Mouse press actions
 function love.mousepressed(x, y, button, istouch)
+    --BGM toggles
     if button == 1 then
         if x >= 750 and x <= 790 and y >= 10 and y <= 50 and toggleBGM then
             toggleBGM=false
@@ -174,7 +183,7 @@ function love.mousepressed(x, y, button, istouch)
             toggleBGM=true
             TEsound.playLooping("resource/bgm/bgm.mp3", "bgm")
         end
-
+        --Junkyard scale item part
     	if x>=400 and x<=520 and y>=125 and y<=170 and money:get()>=junkyardPrice and junkyardScale < 5 then
     		money:set(money:get() - junkyardPrice)
             earning=earning*1.5
@@ -182,6 +191,7 @@ function love.mousepressed(x, y, button, istouch)
             junkyardPrice=math.pow(10,junkyardScale+5)
     	end
 
+        --Grandma item part
         if x>=600 and x<=750 and y>=125 and y<=170 and money:get()>=grandmotherPrice then
             money:set(money:get() - grandmotherPrice)
             earning=earning+10
@@ -191,6 +201,7 @@ function love.mousepressed(x, y, button, istouch)
 	    	table.insert(grandma_anims,grandma_anim)
         end
 
+        --Usedcollector item part
         if x>=400 and x<=570 and y>=190 and y<=235 and money:get()>=usedcollectorPrice then
             money:set(money:get() - usedcollectorPrice)
             earning=earning+200
@@ -200,6 +211,7 @@ function love.mousepressed(x, y, button, istouch)
             table.insert(tv_anims,tv_anim)
         end
 
+        --Apartment item part
         if x>=600 and x<=760 and y>=190 and y<=235 and money:get()>=apartmentPrice then
             money:set(money:get() - apartmentPrice)
             earning = earning + 9000
@@ -209,15 +221,17 @@ function love.mousepressed(x, y, button, istouch)
             table.insert(can_anims,can_anim)
         end
 
+        --Factory item part
         if x>=400 and x<=570 and y>=255 and y<=300 and money:get()>=factoryPrice then
             money:set(money:get() - factoryPrice)
             earning = earning + 20000
             factoryPrice = factoryPrice * 1.1
-            fatory = factory + 1
+            factory = factory + 1
             industry_anim = anim.newAnimation(0.1,true,industry1,industry2)
             table.insert(industry_anims,industry_anim)
         end
 
+        --Import item part
         if x>=600 and x<=735 and y>=255 and y<=300 and money:get()>=importPrice then
             money:set(money:get() - importPrice)
             earning = earning + 600000
@@ -227,6 +241,7 @@ function love.mousepressed(x, y, button, istouch)
             table.insert(global_anims,global_anim)
         end
 
+        --Ocean item part
         if x>=400 and x<=550 and y>=320 and y<=365 and money:get()>=oceanPrice then
             money:set(money:get() - oceanPrice)
             earning = earning + 20000000
@@ -235,7 +250,8 @@ function love.mousepressed(x, y, button, istouch)
             ocean_anim = anim.newAnimation(0.1,true,ocean1,ocean2)
             table.insert(ocean_anims,ocean_anim)
         end
-        
+            
+        --Space item part
         if x>=600 and x<=760 and y>=320 and y<=365 and money:get()>=spacePrice then
             money:set(money:get() - spacePrice)
             earning = earning + 360000000
@@ -245,6 +261,7 @@ function love.mousepressed(x, y, button, istouch)
             table.insert(satellite_anims,satellite_anim)
         end
 
+        --Game save part
         if x>=100 and x<=200 and y>=500 and y<=530 then
 	    saveData = {}
 	    saveData['reset_bonus']=reset_bonus
@@ -282,6 +299,7 @@ function love.mousepressed(x, y, button, istouch)
             success = love.filesystem.write("save.sav",saveString)
         end
 
+        --Game reset part
         if x>=100 and x<=200 and y>=550 and y<=580 then
         	reset_bonus=reset_bonus+math.floor(money:get()/10000000000000)
             money:set(money:get()-money:get())
@@ -356,6 +374,7 @@ function love.mousepressed(x, y, button, istouch)
     end
 end
 
+--Update frame at each second
 function love.update(dt)
     money:set(money:get()+(earning*dt)+(earning*reset_bonus*0.01))
     TEsound.cleanup()
