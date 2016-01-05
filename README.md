@@ -1,7 +1,7 @@
 # KJS
 Korean Junkyard Simulator
 
-## Naver D2 Fest Campus 2015
+##D2 CAMPUS FEST 2015 프로젝트 제출
 
 ### 프로젝트 소개 및 설명
 ####1. 프로젝트 소개
