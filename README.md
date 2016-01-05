@@ -22,7 +22,7 @@ Lua Script를 사용하고 Love2D를 사용하여 prototype까지 개발 하였�
 
 
 ### 데모 동영상 링크 (Google Drive)
-* https://drive.google.com/file/d/0B0NMsYygQ6icVzRwbm1JSG5wZ2M/view?usp=sharing
+* https://drive.google.com/file/d/0B0NMsYygQ6icVzRwbm1JSG5wZ2M/view?usp=sharing (76.3MB)
 
 ### 사용한 오픈소스 이름과 홈페이지 목록
 * 게임 엔진 - [love2d](https://love2d.org/)
